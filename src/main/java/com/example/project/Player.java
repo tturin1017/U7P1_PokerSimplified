@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Player{
     private ArrayList<Card> hand;
     private ArrayList<Card> allCards; //the current community cards + hand
-    private String[] suits  = {"Hearts","Diamonds","Clubs", "Spades"};
-    private String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+    String[] suits  = {"♠","♥","♣", "♦"};
+    String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
 
     public Player(){
         hand = new ArrayList<>();
@@ -20,7 +20,10 @@ public class Player{
     }
 
     public String playHand(ArrayList<Card> communityCards){
-        allCards = communityCards;
+        allCards = new ArrayList<Card>();
+        for(Card c: communityCards){
+            allCards.add(c);
+        }
         allCards.add(hand.get(0));
         allCards.add(hand.get(1));
         sortAllCards();
@@ -33,6 +36,7 @@ public class Player{
         if(isStraight()){return "Straight";}
         if(isThreeOfAKind()){return "Three of a Kind";}
         if(isTwoPair()){return "Two Pair";}
+        if(isPair()){return "A Pair";}
         if(isHighCard()){return "High Card";}        
         return "Nothing";
     }
@@ -55,7 +59,7 @@ public class Player{
 
     public ArrayList<Integer> findRankingFrequency(){
         ArrayList<Integer> freqList = new ArrayList<>();
-        for(String s: ranks){ //loop through ranks {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+        for(String s: ranks){ //loop through ranks {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
             int count = 0;
             for(Card card: allCards){ //loop through community + hand cards
                 if(card.getRank().equals(s)){
@@ -128,15 +132,18 @@ public class Player{
 
     public boolean isFullHouse(){ //3 pair and a two pair .. can't reuse 3 of a kind and pair because what if 3 pair is the community cards a
         ArrayList<Integer>freqList = findRankingFrequency();
-        int isTrue = 0;
+        boolean hasTwoPair = false;
+        boolean hasThreePair = false;
         for(int num : freqList){
-            if(num==3){
-                isTrue++;
-            }else if (num==2){
-                isTrue++;
+            if(num == 3){
+                hasThreePair = true;
+            }
+            if(num == 2){
+                hasTwoPair = true;
             }
         }
-        if(isTrue == 2){
+
+        if(hasTwoPair && hasThreePair){
             return true;
         }else{
             return false;
@@ -164,6 +171,7 @@ public class Player{
 
     public boolean isThreeOfAKind(){
         ArrayList<Integer>freqList = findRankingFrequency();
+        System.out.println(freqList);
         for(int i=0 ; i<freqList.size(); i++){
             if(freqList.get(i)==3){
                 if(hand.get(0).getRank().equals(ranks[i]) || hand.get(1).getRank().equals(ranks[i])){
@@ -176,28 +184,51 @@ public class Player{
     }
 
     public boolean isTwoPair(){
-        ArrayList<Integer>freqList = findRankingFrequency();
-        int count = 0;
-        for(int num: freqList){
-            if(num == 2){
-                count++;
+        ArrayList<Integer> freqList = findRankingFrequency();
+        boolean firstPair = false;
+        boolean secondPair = false;
+        String c1 = hand.get(0).getRank();
+        String c2 = hand.get(1).getRank();
+        if(isPair()){ // one of the pairs is in the hand
+            for(int i=0;i<freqList.size();i++){ //check if there is a pair in the community cards
+                if(freqList.get(i)==2){
+                    if(ranks[i]!=c1 && ranks[i]!=c2){
+                        return true;
+                    }
+                }
             }
+        }else{ //if the hand isn't a pair, each card in hand must have a pair in the community cards
+            for(int i=0;i<freqList.size();i++){ 
+                if(freqList.get(i)==2){
+                    if(ranks[i]==c1){
+                        firstPair = true;
+                    }else if (ranks[i]==c2){
+                        secondPair = true;
+                    }
+                }
+            }
+            if(firstPair && secondPair){
+                return true;
+            }else{
+                return false;
+            }
+         
         }
-
-        if(count == 2){
-            return true;
-        }else{
-            return false;
-        }
+        return false;
     }
+
 
     public boolean isPair(){
         ArrayList<Integer> rankingFreqList = findRankingFrequency();
+        // System.out.println(rankingFreqList);
+        // System.out.println(ranks.toString());
         for(int i=0; i< rankingFreqList.size();i++){
             //if there is a pair and that pair is a part of the players hand, not just in the community deck
-            if(rankingFreqList.get(i)==2 && (hand.get(0).getRank().equals(ranks[i])||hand.get(1).getRank().equals(ranks[i]) ) ){
-                return true;
-            }
+            if(rankingFreqList.get(i)==2){
+                if(hand.get(0).getRank().equals(ranks[i])||hand.get(1).getRank().equals(ranks[i])){
+                    return true;
+                }
+            } 
         }
         return false;
     }

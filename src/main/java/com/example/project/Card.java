@@ -29,10 +29,10 @@ public class Card{
             case "8": return 8;
             case "9": return 9;
             case "10": return 10;
-            case "Jack": return 11;
-            case "Queen": return 12;
-            case "King": return 13;
-            case "Ace": return 14;
+            case "J": return 11;
+            case "Q": return 12;
+            case "K": return 13;
+            case "A": return 14;
         }
         return -1;
     }
