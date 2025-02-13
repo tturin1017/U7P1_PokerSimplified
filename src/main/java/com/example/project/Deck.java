@@ -8,8 +8,6 @@ public class Deck{
     public Deck(){
         cards = new ArrayList<>();
         initializeDeck();
-        shuffleDeck();
-
     }
 
     public ArrayList<Card> getCards(){
@@ -41,6 +39,8 @@ public class Deck{
     public  boolean isEmpty(){
         return cards.isEmpty();
     }
+
+   
 
 
 }
