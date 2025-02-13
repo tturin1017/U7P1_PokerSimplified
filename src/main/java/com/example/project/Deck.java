@@ -8,6 +8,7 @@ public class Deck{
     public Deck(){
         cards = new ArrayList<>();
         initializeDeck();
+        shuffleDeck();
     }
 
     public ArrayList<Card> getCards(){
@@ -20,7 +21,7 @@ public class Deck{
 
         for(int i =0; i < suits.length; i++){
             for(int j=0;j<ranks.length;j++){
-                cards.add(new Card(ranks[j],suit[i]));
+                cards.add(new Card(ranks[j],suits[i]));
             }
         }
     }
@@ -33,7 +34,9 @@ public class Deck{
         if(!cards.isEmpty()){
             return cards.remove(0);
         }
-        return null;
+        Card c = cards.get(0);
+        cards.remove(0);
+        return c;
     }
 
     public  boolean isEmpty(){

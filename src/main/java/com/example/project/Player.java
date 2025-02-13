@@ -10,22 +10,34 @@ public class Player{
 
     public Player(){
         hand = new ArrayList<>();
-        deck = new Deck().getCards();
     }
 
-    public getHand(){return hand;}
-    public getAllCards(){return allCards;}
+    public ArrayList<Card> getHand(){return hand;}
+    public ArrayList<Card> getAllCards(){return allCards;}
 
-    public String playHand(Card[] communityCards){
+    public void addCard(Card c){
+        hand.add(c);
+    }
+
+    public String playHand(ArrayList<Card> communityCards){
         allCards = communityCards;
         allCards.add(hand.get(0));
         allCards.add(hand.get(1));
-        allCards = sortAllCards();
-        
-        return "";
+        sortAllCards();
+
+        if(isRoyalFlush()){return "Royal Flush";}
+        if(isStraightFlush()){return "Straight Flush";}
+        if(isFourOfAKind()){return "Four of a Kind";}
+        if(isFullHouse()){return "Full House";}
+        if(isFlush()){return "Flush";}
+        if(isStraight()){return "Straight";}
+        if(isThreeOfAKind()){return "Three of a Kind";}
+        if(isTwoPair()){return "Two Pair";}
+        if(isHighCard()){return "High Card";}        
+        return "Nothing";
     }
 
-    public ArrayList<Card> sortAllCards(){ 
+    public void sortAllCards(){ 
         //use selection sort
         for(int i=0; i<allCards.size(); i++){
             int min_i = i;
@@ -34,12 +46,11 @@ public class Player{
                     min_i = j;
                 }
                 //swap
-                card temp = allCards.get(i);
-                allCards.set(i,cards.get(min_i));
+                Card temp = allCards.get(i);
+                allCards.set(i,allCards.get(min_i));
                 allCards.set(min_i,temp);
             }
         }
-        return cards;
     }
 
     public ArrayList<Integer> findRankingFrequency(){
@@ -51,7 +62,7 @@ public class Player{
                     count++;
                 }
             }
-            freqlist.add(count);
+            freqList.add(count);
         }
         return freqList; 
     }
@@ -72,9 +83,9 @@ public class Player{
 
     public boolean isRoyalFlush(){
         //has to be a flush, check
-        if(isFlush(allCards)){ //hand + community cards are all of the same suit
+        if(isFlush()){ //hand + community cards are all of the same suit
             //now check for straight
-            if(isStraight(allCards)){
+            if(isStraight()){
                 //now check if lowest card is 10
                 //loop through community cards and find min
                 int min = Integer.MAX_VALUE;
@@ -97,7 +108,7 @@ public class Player{
     }
 
     public boolean isStraightFlush(){
-        if(isStraight(allCards) && isFlush(allCards)){
+        if(isStraight() && isFlush()){
             return true;
         }
 
@@ -107,7 +118,7 @@ public class Player{
     public boolean isFourOfAKind(){
         //cheak for a frequency of 4
         ArrayList<Integer>freqList = findRankingFrequency();
-        for(int i=0;i<freqlist.size();i++){
+        for(int i=0;i<freqList.size();i++){
             if(freqList.get(i)==4){
                 return true;
             }
@@ -133,7 +144,7 @@ public class Player{
     }
 
     public boolean isFlush(){
-        ArrayList<Integer> suitFreqList = findSuitFrequency(allCards);
+        ArrayList<Integer> suitFreqList = findSuitFrequency();
         for(int i=0;i<suitFreqList.size(); i++){
             if(suitFreqList.get(i)==5){
                 return true;
@@ -155,7 +166,7 @@ public class Player{
         ArrayList<Integer>freqList = findRankingFrequency();
         for(int i=0 ; i<freqList.size(); i++){
             if(freqList.get(i)==3){
-                if(hand.get(0).getRank().equals(rank[i]) || hand.get(1).getRank().equals(rank[i])){
+                if(hand.get(0).getRank().equals(ranks[i]) || hand.get(1).getRank().equals(ranks[i])){
                     //compare hand rank with freqList rank. If at least one of them is the same, its a 3 pair
                     return true;
                 }
@@ -180,18 +191,29 @@ public class Player{
         }
     }
 
-   
-
     public boolean isPair(){
-        ArrayList<Integer> rankingFreqList = findRankingFrequency(allCards);
+        ArrayList<Integer> rankingFreqList = findRankingFrequency();
         for(int i=0; i< rankingFreqList.size();i++){
-            if(rankingFreqList.get(i)==2 && //if there is a pair and that pair is a part of the players hand, not just in the community deck
-            (hand.get(0).getRank().equals(deck.getCards().get(i).getRank()|| 
-            hand.get(1).getRank().equals(deck.getCards().get(i).getRank()
-            )))){
-               return true;
+            //if there is a pair and that pair is a part of the players hand, not just in the community deck
+            if(rankingFreqList.get(i)==2 && (hand.get(0).getRank().equals(ranks[i])||hand.get(1).getRank().equals(ranks[i]) ) ){
+                return true;
             }
         }
+        return false;
+    }
+    
+    public boolean isHighCard(){
+        int max = Integer.MIN_VALUE;
+        for(int i =0 ; i < allCards.size();i++){
+            if(allCards.get(i).getRankValue()>max){
+                max = allCards.get(i).getRankValue();
+            }
+        }
+
+        if(max == hand.get(0).getRankValue() || max==hand.get(1).getRankValue()){
+            return true;
+        }
+        
         return false;
     }
     
