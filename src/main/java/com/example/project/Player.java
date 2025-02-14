@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class Player{
     private ArrayList<Card> hand;
     private ArrayList<Card> allCards; //the current community cards + hand
-    String[] suits  = {"♠","♥","♣", "♦"};
-    String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
-
+    String[] suits  = Utility.getSuits();
+    String[] ranks = Utility.getRanks();
+    
     public Player(){
         hand = new ArrayList<>();
     }
@@ -217,11 +217,8 @@ public class Player{
         return false;
     }
 
-
     public boolean isPair(){
         ArrayList<Integer> rankingFreqList = findRankingFrequency();
-        // System.out.println(rankingFreqList);
-        // System.out.println(ranks.toString());
         for(int i=0; i< rankingFreqList.size();i++){
             //if there is a pair and that pair is a part of the players hand, not just in the community deck
             if(rankingFreqList.get(i)==2){
