@@ -40,5 +40,22 @@ public class Utility{
         return -1;
     }
 
+    public static int getHandRanking(String result){
+        switch(result){
+            case "Royal Flush": return 11;
+            case "Straight Flush": return 10;
+            case "Four of a Kind": return 9;
+            case "Full House": return 8;
+            case "Flush": return 7;
+            case "Straight": return 6;
+            case "Three of a Kind": return 5;
+            case "Two Pair": return 4;
+            case "A Pair": return 3;
+            case "High Card": return 2;
+            case "Nothing": return 1;
+        }
+        return -1;
+    }
+
 
 }

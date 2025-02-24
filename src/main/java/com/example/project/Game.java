@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Game{
     public static String determineWinner(Player p1, Player p2,String p1Hand, String p2Hand,ArrayList<Card> communityCards){
-        int p1Result = getHandRanking(p1Hand);
-        int p2Result = getHandRanking(p2Hand);
+        int p1Result = Utility.getHandRanking(p1Hand);
+        int p2Result = Utility.getHandRanking(p2Hand);
 
         if(p1Result>p2Result){
             return "Player 1 wins!"; //player two wins!
@@ -34,7 +34,6 @@ public class Game{
                 message="Tie!";
             }
 
-                    
             //possible for two players to get full house 3p and 2p
             //community cards must be 3p so deteremine who has the higher pair
             if(p1Result== 8 && p2Result == 8){ //FULL HOUSE DRAW
@@ -54,10 +53,12 @@ public class Game{
                 }
                 if(Utility.getRankValue(p1_rank)>Utility.getRankValue(p2_rank)){
                     return "Player 1 wins!";
-                }else{
+                }else if(Utility.getRankValue(p1_rank)<Utility.getRankValue(p2_rank)){
                     return "Player 2 wins!";
+                }else{ //3 pair is the community cards so find the highest card 
+                    return message; //max  between cards is calculated
                 }
-            }else if(p1Result == 4 && p2Result == 4){
+            }else if(p1Result == 4 && p2Result == 4){ //TWO PAIR DRAW
                 //check which 2 pair is in the community deck
                 int i1 = -1; int i2 = -1;
                 for(int i=0;i<p1_rankFreqList.size();i++){
@@ -72,14 +73,12 @@ public class Game{
                 int x = Utility.getRankValue(Utility.getRanks()[i1]); 
                 int y  = Utility.getRankValue(Utility.getRanks()[i2]); 
                 if(x>y){
-                    return "Player 1 wins! Two Pair Draw";
+                    return "Player 1 wins!"; //two pair draw
                 }else if(x>y){
-                    return "Player 2 wins! Two Pair Draw";
+                    return "Player 2 wins!";
                 }else{
                     return "It's a tie!";
                 }
-            
-            
             }else if(p1Result == 3 && p2Result == 3){ //PAIR DRAW. Find out which pair is the highest
                 for(int i =0 ; i<p1_rankFreqList.size();i++){
                     if(p1_rankFreqList.get(i)==2){
@@ -111,24 +110,6 @@ public class Game{
         return -1;
     }
 
-
-
-    public static int getHandRanking(String result){
-        switch(result){
-            case "Royal Flush": return 11;
-            case "Straight Flush": return 10;
-            case "Four of a Kind": return 9;
-            case "Full House": return 8;
-            case "Flush": return 7;
-            case "Straight": return 6;
-            case "Three of a Kind": return 5;
-            case "Two Pair": return 4;
-            case "A Pair": return 3;
-            case "High Card": return 2;
-            case "Nothing": return 1;
-        }
-        return -1;
-    }
 
     public static void play(){
             //initialize a deck
@@ -170,7 +151,20 @@ public class Game{
         }
         
         public static void main(String[] args) {
-            play();
+            //play();
+            Player player = new Player();
+            player.addCard(new Card("7", "♠"));
+            player.addCard(new Card("8", "♣"));
+            
+            // Community Cards
+            ArrayList<Card> communityCards = new ArrayList<>();
+            communityCards.add(new Card("7", "♦"));
+            communityCards.add(new Card("8", "♥"));
+            communityCards.add(new Card("A", "♠"));
+            
+            player.playHand(communityCards);
+            String handResult = player.playHand(communityCards);
+            System.out.println(handResult);
     }
 
 }
