@@ -37,11 +37,11 @@ public class Game{
             //possible for two players to get full house 3p and 2p
             //community cards must be 3p so deteremine who has the higher pair
             if(p1Result== 8 && p2Result == 8){ //FULL HOUSE DRAW
-                return message + "Full House Draw";
+                return message;
             }else if(p1Result == 7 && p2Result == 7){ //FLUSH DRAW. Determine who has the higher card in hand
-                return message+ " Flush Draw";
+                return message;
             }else if (p1Result == 6 && p2Result == 6){//STRAIGHT DRAW 
-                return message + " Straight Draw";
+                return message;
             }else if(p1Result == 5 && p2Result == 5){ //THREE OF A KIND DRAW
                 //find rank frequency list and deteremine who has the highest 3 pair 
                 for(int i =0 ; i<p1_rankFreqList.size();i++){
@@ -59,15 +59,38 @@ public class Game{
                     return message; //max  between cards is calculated
                 }
             }else if(p1Result == 4 && p2Result == 4){ //TWO PAIR DRAW
-                //check which 2 pair is in the community deck
-                int i1 = -1; int i2 = -1;
+                //scenario 1-> 1 pair is the in the community deck. Check for this
+                int p1_i_firstPair  =-1; int p1_i_secondPair = -1; int p2_i_firstPair = -1; int p2_i_secondPair = -1;
                 for(int i=0;i<p1_rankFreqList.size();i++){
-                    if(p1_rankFreqList.get(i)==2 && p2_rankFreqList.get(i)==2){
-                    }else if(p1_rankFreqList.get(i)==2){
-                        i1 = i;
-                    }else if(p2_rankFreqList.get(i)==2){
-                        i2=i;
+                    if(p1_rankFreqList.get(i)==2){
+                        if(p1_i_firstPair==-1){
+                            p1_i_firstPair=i;
+                        }else if(p1_i_firstPair!=-1 && p1_i_secondPair == -1){
+                            p1_i_secondPair = i;
+                        }
                     }
+                    if(p2_rankFreqList.get(i)==2){
+                        if(p2_i_firstPair==-1){
+                            p2_i_firstPair=i;
+                        }else if(p2_i_firstPair!=-1 && p2_i_secondPair == -1){
+                            p2_i_secondPair = i;
+                        }
+                    }
+                }
+
+                int p1_firstPair_val = Utility.getRankValue(Utility.getRanks()[p1_i_firstPair]);
+                int p1_secondPair_val = Utility.getRankValue(Utility.getRanks()[p1_i_firstPair]);
+                int p1_firstPair_val = Utility.getRankValue(Utility.getRanks()[p1_i_firstPair]);
+                int p1_firstPair_val = Utility.getRankValue(Utility.getRanks()[p1_i_firstPair]);
+
+                if (p1_i_firstPair == p2_i_firstPair){
+                    //check other two pairs to determine who is higher 
+                    
+                }
+                
+                //|| p1_i_firstPair == p2_i_secondPair || p1_i_secondPair == p2_i_firstPair || p1_i_secondPair == p2_i_secondPair){
+                    //community card is a pair
+                    //check 
                 }
                 //now compare rank
                 int x = Utility.getRankValue(Utility.getRanks()[i1]); 
@@ -77,7 +100,7 @@ public class Game{
                 }else if(x>y){
                     return "Player 2 wins!";
                 }else{
-                    return "It's a tie!";
+                    return "Tie!";
                 }
             }else if(p1Result == 3 && p2Result == 3){ //PAIR DRAW. Find out which pair is the highest
                 for(int i =0 ; i<p1_rankFreqList.size();i++){

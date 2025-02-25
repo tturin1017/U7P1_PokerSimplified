@@ -174,10 +174,6 @@ public class Player{
         System.out.println(freqList);
         for(int i=0 ; i<freqList.size(); i++){
             if(freqList.get(i)==3){
-                // if(hand.get(0).getRank().equals(ranks[i]) || hand.get(1).getRank().equals(ranks[i])){
-                //     //compare hand rank with freqList rank. If at least one of them is the same, its a 3 pair
-                //     return true;
-                // }
                 return true;
             }
         }
