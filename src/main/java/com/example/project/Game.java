@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 
 public class Game{
+    
     public static String determineWinner(Player p1, Player p2,String p1Hand, String p2Hand,ArrayList<Card> communityCards){
         int p1Result = Utility.getHandRanking(p1Hand);
         int p2Result = Utility.getHandRanking(p2Hand);
@@ -173,33 +174,6 @@ public class Game{
         
         public static void main(String[] args) {
           
-            Player player1 = new Player();
-            Player player2 = new Player();
-            
-            // Player 1 has a Full House (7s full of 8s)
-            player1.addCard(new Card("7", "♠"));
-            player1.addCard(new Card("7", "♣"));
-            
-            // Player 2 has Three of a Kind (8s)
-            player2.addCard(new Card("8", "♠"));
-            player2.addCard(new Card("8", "♣"));
-            
-            ArrayList<Card> communityCards = new ArrayList<>();
-            communityCards.add(new Card("7", "♦"));
-            communityCards.add(new Card("8", "♥"));
-            communityCards.add(new Card("A", "♠"));
-            
-            String p1Result = player1.playHand(communityCards);
-            String p2Result = player2.playHand(communityCards);
-
-            System.out.println(player1.findRankingFrequency());
-            System.out.println(player2.findRankingFrequency());
-            System.out.println(player1.findSuitFrequency());
-            System.out.println(player2.findSuitFrequency());
-            
-            
-            String winner = Game.determineWinner(player1, player2, p1Result, p2Result, communityCards);
-            System.out.println(winner);
             
     }
 
