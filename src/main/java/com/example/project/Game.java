@@ -10,6 +10,7 @@ public class Game{
         String p1wins = "Player 1 wins!";
         String p2wins = "Player 2 wins!";
         String tie = "Tie!";
+    
 
         if(p1Result>p2Result){
             return p1wins; //player two wins!
@@ -92,18 +93,22 @@ public class Game{
                 for(int i =0 ; i<p1_rankFreqList.size();i++){
                     if(p1_rankFreqList.get(i)==2){
                         p1_rank = Utility.getRanks()[i];
-                    }else if(p2_rankFreqList.get(i)==2){
+                    }
+                    if(p2_rankFreqList.get(i)==2){
                         p2_rank = Utility.getRanks()[i];
                     }
                 }
+
                 if(Utility.getRankValue(p1_rank)>Utility.getRankValue(p2_rank)){
-                    return "Player 1 wins!";
+                    return p1wins;
+                }else if(Utility.getRankValue(p1_rank)==Utility.getRankValue(p2_rank)){
+                    return message; // if the community cards have the pair, then find the max high card between hands
                 }else{
-                    return "Player 2 wins!";
+                    return p2wins;
                 }
             }else if (p1Result == 2 && p2Result == 2){ //If they both have a high card, determine, which one is higher
                 return message;
-            }else if (p1Result == 1 && p2Result == 1){ //Both don't have anything. find the high card
+            }else if (p1Result == 1 && p2Result == 1){ //Both don't have anything. return tie
                 return message;
             }
         }
@@ -173,7 +178,32 @@ public class Game{
         }
         
         public static void main(String[] args) {
-          
+           
+            Player player1 = new Player();
+            Player player2 = new Player();
+            
+            player1.addCard(new Card("7", "♠"));
+            player1.addCard(new Card("10", "♠"));
+    
+            player2.addCard(new Card("A", "♠"));
+            player2.addCard(new Card("3", "♠"));
+
+            
+            // Community cards that could help form the flush
+            ArrayList<Card> communityCards = new ArrayList<>();
+            communityCards.add(new Card("J", "♠")); // Player 1 completes the flush with this card
+            communityCards.add(new Card("J", "♥"));
+            communityCards.add(new Card("Q", "♠"));
+            
+            // Player results after playing the hand
+            String p1Result = player1.playHand(communityCards);
+            String p2Result = player2.playHand(communityCards);
+            System.out.println(p1Result);
+            System.out.println(p2Result);
+            
+            // Determine the winner
+            String winner = Game.determineWinner(player1, player2, p1Result, p2Result, communityCards);
+            System.out.println(winner);
             
     }
 

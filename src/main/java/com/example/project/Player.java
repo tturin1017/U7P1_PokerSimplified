@@ -1,7 +1,6 @@
 package com.example.project;
 import java.util.ArrayList;
 
-
 public class Player{
     private ArrayList<Card> hand;
     private ArrayList<Card> allCards; //the current community cards + hand
@@ -27,6 +26,7 @@ public class Player{
         allCards.add(hand.get(0));
         allCards.add(hand.get(1));
         sortAllCards();
+        System.out.println(allCards);
 
         if(isRoyalFlush()){return "Royal Flush";}
         if(isStraightFlush()){return "Straight Flush";}
@@ -90,24 +90,16 @@ public class Player{
         if(isFlush()){ //hand + community cards are all of the same suit
             //now check for straight
             if(isStraight()){
-                //now check if lowest card is 10
-                //loop through community cards and find min
-                int min = Integer.MAX_VALUE;
-                for(Card c: allCards){
-                    if(c.getRankValue()<min){
-                        min = c.getRankValue();
-                    }
-                }
-                if(min==10){
-                    return true;
+                if(allCards.get(0).getRank()=="10"){
+                    return true; //smallest card is a 10
                 }else{
-                    return false;
+                    return false; //smallest card is not a 10
                 }
             }else{
-                return false;
+                return false; //not a flush
             }
         }else{
-            return false;
+            return false; //not a straight
         }
     }
 
@@ -200,9 +192,10 @@ public class Player{
         for(int i=0; i< rankingFreqList.size();i++){
             //if there is a pair and that pair is a part of the players hand, not just in the community deck
             if(rankingFreqList.get(i)==2){
-                if(hand.get(0).getRank().equals(ranks[i])||hand.get(1).getRank().equals(ranks[i])){
-                    return true;
-                }
+                // if(hand.get(0).getRank().equals(ranks[i])||hand.get(1).getRank().equals(ranks[i])){
+                //     return true;
+                // }
+                return true;
             } 
         }
         return false;
@@ -210,12 +203,12 @@ public class Player{
     
     public boolean isHighCard(){
         int max = Integer.MIN_VALUE;
-        for(int i =0 ; i < allCards.size();i++){
-            if(allCards.get(i).getRankValue()>max){
-                max = allCards.get(i).getRankValue();
+        for(Card c: allCards){
+            if(c.getRankValue()>max){
+                max = c.getRankValue();
             }
         }
-        if(max == hand.get(0).getRankValue() || max==hand.get(1).getRankValue()){
+        if(max == hand.get(0).getRankValue() || max==hand.get(1).getRankValue()){ //high card if a hand card is the highest out of all of the cards 
             return true;
         }
 
